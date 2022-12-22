@@ -17,6 +17,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.azisaba.azisabareportbot.data.ReportFlags
 import org.mariadb.jdbc.Driver
 import java.sql.Connection
 import java.util.Properties
@@ -156,4 +157,29 @@ object Util {
                 }
             }
         }
+
+    fun getPlayerId(name: String) =
+        getConnection().use { conn ->
+            conn.prepareStatement("SELECT `id` FROM `players` WHERE `name` = ?").use { ps ->
+                ps.setString(1, name)
+                ps.executeQuery().use { rs ->
+                    if (rs.next()) {
+                        UUID.fromString(rs.getString("id"))
+                    } else {
+                        null
+                    }
+                }
+            }
+        }
+
+    inline fun <reified T> Int.toNamedFlags(): Set<String> {
+        val namedFlags = mutableSetOf<String>()
+        for (field in T::class.java.fields) {
+            if (field.type != Int::class.java) continue
+            if (this.and(field.get(null) as Int) != 0) {
+                namedFlags.add(field.name)
+            }
+        }
+        return namedFlags
+    }
 }

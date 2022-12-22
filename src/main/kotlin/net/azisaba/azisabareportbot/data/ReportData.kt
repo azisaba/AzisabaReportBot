@@ -42,5 +42,29 @@ data class ReportData(
                     }
                 }
             }
+
+        private fun getManyReports(rs: ResultSet): List<ReportData> {
+            val reports = mutableListOf<ReportData>()
+            while (rs.next()) {
+                reports.add(fromResultSet(rs))
+            }
+            return reports
+        }
+
+        fun getByReportedPlayer(id: UUID) =
+            Util.getConnection().use { conn ->
+                conn.prepareStatement("SELECT * FROM `reports` WHERE `reported_id` = ?").use { ps ->
+                    ps.setString(1, id.toString())
+                    ps.executeQuery().use { rs -> getManyReports(rs) }
+                }
+            }
+
+        fun getByReporterPlayer(id: UUID) =
+            Util.getConnection().use { conn ->
+                conn.prepareStatement("SELECT * FROM `reports` WHERE `reporter_id` = ?").use { ps ->
+                    ps.setString(1, id.toString())
+                    ps.executeQuery().use { rs -> getManyReports(rs) }
+                }
+            }
     }
 }

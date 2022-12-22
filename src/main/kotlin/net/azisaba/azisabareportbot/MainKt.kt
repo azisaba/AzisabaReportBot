@@ -5,6 +5,7 @@ import dev.kord.core.Kord
 import dev.kord.core.behavior.interaction.respondEphemeral
 import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.core.event.interaction.ApplicationCommandInteractionCreateEvent
+import dev.kord.core.event.interaction.ButtonInteractionCreateEvent
 import dev.kord.core.kordLogger
 import dev.kord.core.on
 import net.azisaba.azisabareportbot.commands.CloseCommand
@@ -25,8 +26,18 @@ suspend fun main() {
             if (interaction.invokedCommandName == "info") InfoCommand.handle(interaction)
             if (interaction.invokedCommandName == "close") CloseCommand.handle(interaction)
         } catch (e: Exception) {
-            interaction.respondEphemeral { content = "エラーが発生しました。" }
             e.printStackTrace()
+            interaction.respondEphemeral { content = "エラーが発生しました。" }
+        }
+    }
+
+    client.on<ButtonInteractionCreateEvent> {
+        if (interaction.user.isBot) return@on
+        try {
+            if (interaction.componentId.startsWith("info:")) InfoCommand.handleButtonInteraction(interaction)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            interaction.respondEphemeral { content = "エラーが発生しました。" }
         }
     }
 
