@@ -25,7 +25,7 @@ suspend fun main() {
         try {
             if (interaction.invokedCommandName == "info") InfoCommand.handle(interaction)
             if (interaction.invokedCommandName == "close") CloseCommand.handle(interaction)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             e.printStackTrace()
             interaction.respondEphemeral { content = "エラーが発生しました。" }
         }
@@ -35,7 +35,7 @@ suspend fun main() {
         if (interaction.user.isBot) return@on
         try {
             if (interaction.componentId.startsWith("info:")) InfoCommand.handleButtonInteraction(interaction)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             e.printStackTrace()
             interaction.respondEphemeral { content = "エラーが発生しました。" }
         }
