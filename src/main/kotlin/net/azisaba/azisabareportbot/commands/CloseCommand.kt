@@ -33,7 +33,7 @@ object CloseCommand : CommandHandler {
         val additionalFlag = when (reason) {
             "resolved" -> ReportFlags.RESOLVED
             "invalid" -> ReportFlags.INVALID
-            "not-enough-proofs" -> ReportFlags.NEED_MORE_PROOFS
+            "not-enough-proof" -> ReportFlags.NEED_MORE_PROOF
             else -> 0
         }
         val newFlags = report.flags.and(ReportFlags.OPEN.inv()).or(ReportFlags.CLOSED).or(additionalFlag)
@@ -81,7 +81,7 @@ object CloseCommand : CommandHandler {
                 choice("Resolved", "resolved") {
                     name(Locale.JAPANESE, "解決")
                 }
-                choice("Not enough proofs", "not-enough-proofs") {
+                choice("Not enough proof", "not-enough-proof") {
                     name(Locale.JAPANESE, "証拠不十分")
                 }
             }

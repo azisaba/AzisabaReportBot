@@ -5,5 +5,5 @@ object ReportFlags {
     const val CLOSED = 1 shl 1
     const val RESOLVED = 1 shl 2
     const val INVALID = 1 shl 3
-    const val NEED_MORE_PROOFS = 1 shl 4
+    const val NEED_MORE_PROOF = 1 shl 4
 }
